@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Button, Card, Carousel, Image, Container, Row, Col, Table, Spinner, Alert } from "react-bootstrap";
+import { Button, Card, Image, Container, Row, Col, Table, Spinner, Alert } from "react-bootstrap";
 import styles from "./page.module.css";
 
-const CarDetails = () => {
+const CarDetailsComponent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const carId = searchParams.get("id");
@@ -63,7 +63,6 @@ const CarDetails = () => {
             <div className={styles.carousel}>
               <Image src="/car.png" fluid className={styles.image} />
             </div>
-
           </Col>
 
           <Col md={6} className={styles.detailsSection}>
@@ -101,5 +100,12 @@ const CarDetails = () => {
     </Container>
   );
 };
+
+// Wrap the component in Suspense
+const CarDetails = () => (
+  <Suspense fallback={<div className={styles.loadingContainer}><Spinner animation="border" variant="primary" /></div>}>
+    <CarDetailsComponent />
+  </Suspense>
+);
 
 export default CarDetails;

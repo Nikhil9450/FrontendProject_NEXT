@@ -1,10 +1,12 @@
 import axios from "axios";
 import https from "https";
 
-export async function GET(req, { params }) {
-  console.log("Request Params:", params); 
-
+export async function GET(req, context) {
   try {
+    const params = await context.params;  
+
+    console.log("Request Params:", params);
+
     if (!params?.id) {
       return new Response(JSON.stringify({ error: "Car ID is required" }), { status: 400 });
     }
@@ -13,9 +15,9 @@ export async function GET(req, { params }) {
 
     const response = await axios.get("https://www.freetestapi.com/api/v1/cars", { httpsAgent: agent });
 
-    console.log("Fetched cars data:", response.data); 
+    console.log("Fetched cars data:", response.data);
 
-    const car = response.data.find((c) => c.id.toString() === params.id);
+    const car = response.data.find((c) => c.id.toString() === params.id.toString());
 
     if (!car) {
       return new Response(JSON.stringify({ error: "Car not found" }), { status: 404 });
